@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+
+<resultMap type="revVO" id="revMap">
+      <result property="prNo" column="pr_no"/>
+      <result property="prContent" column="pr_content"/>
+      <result property="prFile" column="pr_file"/>
+      <result property="prDate" column="pr_date"/>
+      <result property="prHeart" column="pr_heart"/>
+      <result property="memId" column="mem_id"/>
+      <result property="prodNo" column="prod_no"/>
+      <result property="atchFileId" column="atch_file_id"/>
+   </resultMap>
+   
+   <select id="findAll" resultType="revVO"> 
+   
+      SELECT * FROM PROD_REVIEW
+            
+   </select>
+   
+   <insert id="insert" parameterType="revVO">
+		<selectKey keyProperty="prNo" resultType="string"
+			order="BEFORE">
+			SELECT pr_num_seq.nextval FROM dual
+		</selectKey>
+		insert into prod_review (pr_no, pr_content, pr_file, pr_date, pr_heart, mem_id, prod_no, atch_file_id )
+		values (#{prNo}, #{prContent}, #{prFile}, TO_DATE(#{prDate}, 'YYYY-MM-DD
+		HH24:MI:SS'), #{prHeart}, #{memId}, #{prodNo}, #{atchFileId} )
+	</insert>
+   
+</mapper>

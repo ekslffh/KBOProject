@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="brd">
+  
+<!--   <resultMap type="brdVO" id="memMap"> -->
+<!-- 		<result property="nbNo" column="nb_no"/> -->
+<!-- 		<result property="nbTitle" column="nb_title"/> -->
+<!-- 		<result property="nbContent" column="nb_content"/> -->
+<!-- 		<result property="nbCreatedDt" column="nb_created_dt"/> -->
+<!-- 		<result property="nbUpdatedDt" column="nb_updated_dt"/> -->
+<!-- 		<result property="memId" column="mem_id"/> -->
+<!-- 		<result property="atchFileId" column="atch_file_id"/> -->
+<!-- 	</resultMap> -->
+	
+
+  	<!-- 전체 글 갯수 조회 -->
+  	<select id="countList" resultType="int">
+  		SELECT COUNT(*) FROM NOTICE_BOARD
+  	</select>
+  	
+<!--   	<select id="findAll" resultType="brdVO"> -->
+<!--   		select * from notice_board -->
+<!--   	</select> -->
+
+	<select id="findNoticeByCg" resultType="brdVO">
+     SELECT *
+     FROM notice_board
+     WHERE mem_id = #{memId}
+    </select>
+  	
+  	<select id="noticeList" parameterType="map" resultType="brdVO">
+  		select A.* from(
+  			select ROWNUM as RNUM, B.* from(
+  				select * from notice_board
+				order by to_number(nb_no) desc
+			)B 
+		<![CDATA[
+ 			where ROWNUM <= #{end} 
+ 		)A			 
+ 		where A.RNUM >= #{start} 
+ 		]]> 
+  	</select>
+  	
+  	<select id="findContentNo" resultType="brdVO">
+  	 SELECT *
+     FROM notice_board
+     WHERE nb_no = #{nbNo}
+  	</select>
+   
+   
+   <insert id="insert" parameterType="brdVO">
+	<selectKey keyProperty="nbNo" resultType="string" order="BEFORE">
+		SELECT board_num_seq.nextval FROM dual
+	</selectKey>
+	insert into notice_board (nb_no, nb_title, nb_content, nb_created_dt, nb_updated_dt, mem_id, atch_file_id)
+	values (#{nbNo}, #{nbTitle}, #{nbContent}, TO_DATE(#{nbCreatedDt}, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(#{nbUpdatedDt},
+	 'YYYY-MM-DD HH24:MI:SS'), #{memId}, #{atchFileId})
+   </insert>
+
+   
+   
+<!--    <update id="update" parameterType="brdVO"> -->
+      
+<!--       UPDATE notice_board -->
+<!--       SET PROD_NAME = #{prodName}, PROD_PRICE = #{prodPrice}, PROD_STOCK = #{prodStock}, ATCH_FILE_ID = #{atchFileId} -->
+<!--       WHERE PROD_NO = #{prodNo}  -->
+      
+<!--    </update> -->
+   
+<!--    <delete id="deleteById" > -->
+   
+<!--       DELETE FROM notice_board WHERE PROD_NO = #{prodNo} -->
+   
+<!--    </delete>	 -->
+  	
+  
+  
+  </mapper>
+  
+  
+  

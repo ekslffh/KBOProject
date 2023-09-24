@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="product">
+
+<resultMap type="prodVO" id="prodMap">
+      <result property="prodNo" column="prod_no"/>
+      <result property="cgName" column="cg_name"/>
+      <result property="prodName" column="prod_name"/>
+      <result property="prodPrice" column="prod_price"/>
+      <result property="prodStock" column="prod_stock"/>
+      <result property="cbNo" column="cb_no"/>
+      <result property="atchFileId" column="atch_file_id"/>
+      <result property="cbName" column="cbName"/>
+   </resultMap>
+   
+   <select id="findAll" resultType="prodVO"> 
+   
+      SELECT * FROM PRODUCT
+            
+   </select>
+   
+   <select id="findProdByCg" resultType="prodVO">
+	  SELECT *
+	  FROM PRODUCT
+	  WHERE cg_name = #{cgName}
+	</select>
+	
+	<select id="findProdByCb" resultType="prodVO">
+	  SELECT *
+	  FROM PRODUCT
+	  WHERE cb_no = #{cbNo}
+	</select>
+	
+<!-- 	<select id="joinCbName" resultMap="prodMap"> -->
+<!-- 	  SELECT c.cb_name AS cbName -->
+<!-- 	  FROM PRODUCT p -->
+<!-- 	  INNER JOIN CLUB c ON p.cb_no = c.cb_no -->
+<!-- 	  WHERE p.cg_name = #{cgName} -->
+<!-- 	</select> -->
+   
+   
+   <select id="findById" resultType="prodVO">
+   
+      SELECT * FROM PRODUCT
+      WHERE PROD_NO = #{prodNo}
+   
+   </select>
+   
+<!--    <select id="findByIds" parameterType="prodVO" resultType="prodVO"> -->
+<!--   SELECT * FROM product -->
+<!--   WHERE prodNo IN -->
+<!--   <foreach collection="prodNos" item="prodNo" open="(" close=")" separator=","> -->
+<!--     #{prodNo} -->
+<!--   </foreach> -->
+<!-- </select> -->
+   
+   <insert id="insert" parameterType="prodVO">
+      
+      INSERT INTO PRODUCT
+      ( PROD_NO, CG_NAME, PROD_NAME, PROD_PRICE, PROD_STOCK, CB_NO, ATCH_FILE_ID, PROD_DETAIL )
+      VALUES
+      ( #{prodNo}, #{cgName}, #{prodName}, #{prodPrice}, #{prodStock}, #{cbNo}, #{atchFileId}, #{prodDetail} )
+      
+   </insert>
+   
+   <update id="update" parameterType="prodVO">
+      
+      UPDATE PRODUCT
+      SET PROD_NAME = #{prodName}, PROD_PRICE = #{prodPrice}, PROD_STOCK = #{prodStock}, ATCH_FILE_ID = #{atchFileId}, PROD_DETAIL=#{prodDetail}
+      WHERE PROD_NO = #{prodNo} 
+      
+   </update>
+   
+   <delete id="deleteById" >
+   
+      DELETE FROM PRODUCT WHERE PROD_NO = #{prodNo}
+   
+   </delete>
+   
+</mapper>

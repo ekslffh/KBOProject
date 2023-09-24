@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+    	<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    
+    <File name="MyFile" filename="logs/app.log">
+    	<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </File>
+  </Appenders>
+<!-- 	log4jexam.sql.Query -->
+<!-- 	log4jexam.sql.Parameter -->
+<!-- 	T01MemberInfoTest.class -->
+  <Loggers>
+  	<!-- 여기에 로거 추가 -->
+	<Logger name="log4jexam.sql" level="debug" additivity="false">
+		<AppenderRef ref="Console"/>
+		<AppenderRef ref="MyFile"/>
+	</Logger>
+<!-- 	<Logger name="log4jexam.sql.Parameter" level="info" additivity="false"> -->
+<!--       <AppenderRef ref="Console"/> -->
+<!-- 	</Logger> -->
+<!-- 	<Logger name="kr.or.ddit.basic.T01MemberInfoTest" level="debug" additivity="false"> -->
+<!--       <AppenderRef ref="Console"/> -->
+<!-- 	</Logger> -->
+
+<!-- 	trace -->
+    <Root level="trace">
+		<AppenderRef ref="Console"/>
+    </Root>
+  </Loggers>
+
+</Configuration>

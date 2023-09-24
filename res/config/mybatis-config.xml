@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 
+    <properties resource="db.properties" />
+    
+    <settings>
+       <setting name="mapUnderscoreToCamelCase" value="true"/>
+       <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+    
+    <typeAliases>
+       <typeAlias type="kr.or.ddit.member.vo.MemberVO" alias="memVO" />
+       <typeAlias type="kr.or.ddit.match.vo.MatchVO" alias="matchVO" />
+       <typeAlias type="kr.or.ddit.product.vo.ProductVO" alias="prodVO" />
+       <typeAlias type="kr.or.ddit.cart.vo.CartVO" alias="cartVO" />
+       <typeAlias type="kr.or.ddit.notice.vo.NoticeVO" alias="brdVO"/>
+       <typeAlias type="kr.or.ddit.wishList.vo.WishListVO" alias="wishListVO" />
+       <typeAlias type="kr.or.ddit.pay.vo.PayVO" alias="payVO" />
+       <typeAlias type="kr.or.ddit.orders.vo.OrdersVO" alias="orVO" />
+       <typeAlias type="kr.or.ddit.ordetail.vo.OrDetailVO" alias="orDeVO" />
+       <typeAlias type="kr.or.ddit.membership.vo.MembershipVO" alias="membershipVO" />
+       <typeAlias type="kr.or.ddit.cartProd.dto.cartProdDto" alias="cartProdDto" />
+       <typeAlias type="kr.or.ddit.ticket.vo.TicketVO" alias="ticketVO" />
+       <typeAlias type="kr.or.ddit.ticketPay.vo.TicketPayVO" alias="ticketPayVO" />
+       <typeAlias type="kr.or.ddit.wishProd.dto.wishProdDto" alias="wishProdDto" />
+       <typeAlias type="kr.or.ddit.ques.vo.QuestionVO" alias="quesVO" />
+       <typeAlias type="kr.or.ddit.club.vo.ClubVO" alias="clubVO" />
+       <typeAlias type="kr.or.ddit.review.vo.ReviewVO" alias="revVO" />
+  	   <typeAlias type="kr.or.ddit.comm.vo.AtchFileVO" alias="fileVO" />
+  	   <typeAlias type="kr.or.ddit.answer.vo.AnswerVO" alias="answerVO" />
+    </typeAliases>
+    
+    <environments default="dev">
+       <environment id="dev">
+          <transactionManager type="JDBC" />
+          <dataSource type="POOLED">
+             <property name="driver" value="${driver}"/>
+             <property name="url" value="${url}"/>
+             <property name="username" value="${username}"/>
+             <property name="password" value="${password}"/>
+             <!-- 활성화된 최대 커넥션 수 -->
+             <property name="poolMaximumActiveConnections" value="1"/>
+             <!-- 유휴상태에서의 최대 커넥션 수 -->
+             <property name="poolMaximumIdleConnections" value="1"/>
+          </dataSource>
+       </environment>
+    </environments>
+    
+    <mappers>
+       <mapper resource="mapper/member.xml" />
+       <mapper resource="mapper/Match.xml" />
+       <mapper resource="mapper/product.xml" />
+       <mapper resource="mapper/cart.xml" />
+       <mapper resource="mapper/wishList.xml" />
+	   <mapper resource="mapper/pay.xml" />
+       <mapper resource="mapper/orders.xml" />
+       <mapper resource="mapper/orDetail.xml" />
+       <mapper resource="mapper/membership.xml" />
+       <mapper resource="mapper/cartProd.xml" />
+       <mapper resource="mapper/ticket.xml" />
+       <mapper resource="mapper/notice.xml" />
+       <mapper resource="mapper/ticketPay.xml" />
+       <mapper resource="mapper/wishProd.xml" />
+       <mapper resource="mapper/ques.xml" />
+       <mapper resource="mapper/club.xml" />
+       <mapper resource="mapper/review.xml" />
+       <mapper resource="mapper/atchFile.xml" />
+       <mapper resource="mapper/answer.xml" />
+    </mappers>
+    
+ </configuration>

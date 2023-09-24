@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticket">
+
+	<resultMap type="ticketVO" id="ticketMap">
+		<result property="tNo" column="t_no"/>
+		<result property="memId" column="mem_id"/>
+		<result property="mNO" column="m_no"/>
+		<result property="scNo" column="sc_no"/>
+		<result property="seNo" column="se_no"/>
+		<result property="tDate" column="t_date"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="ticketVO">
+	
+		select * from ticket
+				
+	</select>
+	
+	<select id="findById" resultType="ticketVO">
+	
+		select * from ticket
+		where t_no = #{tNo}
+	
+	</select>
+	
+	<select id="findByMemId" resultType="ticketVO">
+	
+		select * from ticket
+		where mem_id = #{memId}
+	
+	</select>
+	
+	<insert id="insert" parameterType="ticketVO">
+		
+		insert into ticket (t_no, mem_id, m_no, sc_no, se_no)
+		values (#{tNo}, #{memId}, #{mNo}, #{scNo}, #{seNo});
+		
+	</insert>
+	
+	<update id="update" parameterType="ticketVO">
+		
+		update ticket
+		set mem_id = #{memId}, m_no = #{mNo}, sc_no = #{scNo}, se_no = #{seNo}
+		where t_no = #{tNo}
+		
+	</update>
+	
+	<delete id="deleteById" >
+	
+		delete from ticket where t_no = #{tNo}
+	
+	</delete>
+	
+	<resultMap type="kr.or.ddit.ticket.dto.SectionMatchDTO" id="sectionMatchMap">
+		<result property="scNo" column="sc_no"/>
+		<result property="scName" column="sc_name"/>
+		<result property="scCapacity" column="sc_capacity"/>
+		<result property="scPrice" column="sc_price"/>
+		<result property="stNo" column="st_no"/>
+		<result property="rNum" column="r_num"/>
+	</resultMap>
+	
+	<!-- 경기정보를 받았을 때 해당 경기에 대한 섹션정보와 그에 따른 예매정보를 반환한다. -->
+	<select id="findSectionByMatch" resultType="kr.or.ddit.ticket.dto.SectionMatchDTO" resultMap="sectionMatchMap">
+	
+		select s.sc_no, s.sc_name, s.sc_capacity, s.sc_price, s.st_no, nvl(t.t_num, 0) r_num from section s 
+		left join (select sc_no, count(*) t_num from ticket where m_no = #{mNo} group by sc_no) t 
+		on s.sc_no = t.sc_no
+		where s.st_no = (select st_no from match where m_no = #{mNo})
+		
+	</select>
+	
+	<!-- 섹션정보를 받았을 때 특정 경기에 대한 예매 내역 중 특정 섹션에 대한 좌석정보를 받아와야 한다. -->
+	<select id="findByMatchAndSection" parameterType="ticketVO" resultType="ticketVO">
+	
+		select * from ticket where m_no = #{mNo} and sc_no = #{scNo}
+	
+	</select>
+	
+	<!-- 여러개의 좌석을 선택해서 예매하기 -->
+	<insert id="insertMultipleData" parameterType="java.util.List">
+	
+		insert all 
+		<foreach collection="list" item="data" separator=" ">
+			into ticket (t_no, mem_id, m_no, sc_no, se_no, t_date) values (#{data.tNo}, #{data.memId}, #{data.mNo}, #{data.scNo}, #{data.seNo}, SYSDATE)
+	  	</foreach>
+	  	select 1 from dual
+	</insert>
+	<!-- 결제번호 전부 업데이트하기 -->
+	<update id="updatePayNo" parameterType="java.util.Map">
+	    update ticket
+	    set tp_no = #{tpNo} where t_no in (
+	  <foreach collection="ticketList" item="ticket" separator=",">
+	    #{ticket.tNo}
+	  </foreach>
+	  	)
+    </update>
+    
+	<!-- 올해 월별 매축현황 가져오기 -->
+    <select id="getMonthlyAmt" resultType="kr.or.ddit.ticket.dto.MonthlyAmountDTO">
+    	SELECT m.month, t.year, COALESCE(t.month_amount, 0) AS month_amount
+		FROM (
+		  SELECT LEVEL AS month FROM DUAL CONNECT BY LEVEL &lt;= 12
+		) m
+		LEFT JOIN (
+		  SELECT EXTRACT(MONTH FROM tp_date) AS month, EXTRACT(YEAR FROM tp_date) AS year, SUM(tp_amount) AS month_amount
+		  FROM ticket_pay
+		  WHERE EXTRACT(YEAR FROM tp_date) = EXTRACT(YEAR FROM SYSDATE)
+		  GROUP BY EXTRACT(MONTH FROM tp_date), EXTRACT(YEAR FROM tp_date)
+		) t ON m.month = t.month
+		ORDER BY m.month
+    </select>
+	
+</mapper>

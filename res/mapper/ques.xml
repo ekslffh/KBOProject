@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ques">
+
+	<!-- 전체 글 갯수 조회 -->
+	<select id="countList" resultType="int">
+		select count(*) from prod_ques
+	</select>
+
+	<select id="questionList" parameterType="map"
+		resultType="quesVO">
+		select A.* from(
+		select ROWNUM as RNUM, B.* from(
+		select * from prod_ques
+		order by to_number(pq_no) desc
+		)B 
+		<![CDATA[
+ 			where ROWNUM <= #{end} 
+ 		)A			 
+ 		where A.RNUM >= #{start} 
+ 		]]>
+	</select>
+
+	<select id="findContentNo" resultType="quesVO">
+		select *
+		from prod_ques
+		where pq_no = #{pqNo}
+	</select>
+
+	<insert id="insertQues" parameterType="quesVO">
+		<selectKey keyProperty="pqNo" resultType="string"
+			order="BEFORE">
+			SELECT pq_num_seq.nextval FROM dual
+		</selectKey>
+		insert into prod_ques (pq_no, pq_title, pq_content, pq_date, prod_no,
+		mem_id)
+		values (#{pqNo}, #{pqTitle}, #{pqContent}, TO_DATE(#{pqDate}, 'YYYY-MM-DD
+		HH24:MI:SS'), #{prodNo}, #{memId})
+	</insert>
+
+	<update id="updateQues" parameterType="quesVO">
+		update prod_ques
+		set pq_content = '#{pqContent}'
+		where pq_no = #{pqNo}
+	</update>
+
+	<delete id="deleteQues" parameterType="quesVO">
+		 DELETE FROM prod_ques
+    	 WHERE pq_no = #{pqNo}
+	</delete>
+</mapper>
+  
+  
+  

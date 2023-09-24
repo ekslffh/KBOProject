@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="match">
+
+	<resultMap type="kr.or.ddit.match.vo.MatchVO" id="matchMap">
+		<result property="mNo" column="M_NO" />
+		<result property="mDate" column="M_DATE" />
+		<result property="mPlay" column="M_PLAY" />
+		<result property="cbHome" column="CB_HOME" />
+		<result property="cbAway" column="CB_AWAY" />
+		<result property="stNo" column="ST_NO" />
+	</resultMap>
+
+	<select id="findAll" resultType="kr.or.ddit.match.vo.MatchVO">
+		select m_no, m_date, m_play,
+		c1.cb_name as cb_home, c2.cb_name as cb_away,
+		s.st_name as st_no from
+		match m
+		inner join club c1 on c1.cb_no = m.cb_home
+		inner join club c2 on
+		c2.cb_no = m.cb_away
+		inner join stadium s on s.st_no = m.st_no
+		WHERE m_date >= SYSDATE
+		order by m_date asc
+	</select>
+
+	<select id="findById"
+		resultType="kr.or.ddit.match.vo.MatchVO">
+		select m_no, m_date, m_play,
+		c1.cb_name as cb_home, c2.cb_name as cb_away,
+		s.st_name as st_no from
+		match m
+		inner join club c1 on c1.cb_no = m.cb_home
+		inner join club c2 on
+		c2.cb_no = m.cb_away
+		inner join stadium s on s.st_no = m.st_no
+		WHERE (CB_HOME = #{cbNo} OR CB_AWAY = #{cbNo})
+		AND m_date >= SYSDATE
+		order by m_date asc
+	</select>
+
+	<!-- <select id="findHomeNameBycbNo" resultType="kr.or.ddit.match.dto.MatchDto"> 
+		SELECT c.cb_name FROM club c INNER JOIN Match m ON m.cb_home = c.cb_no WHERE 
+		m.cb_home = #{cbHome} and m.m_no = #{mNo}; </select> <select id="findAwatNameBycbNo" 
+		resultType="kr.or.ddit.match.dto.MatchDto"> SELECT c.cb_name FROM club c 
+		INNER JOIN Match m ON m.cb_home = c.cb_no WHERE m.cb_away = #{cbAway} and 
+		m.m_no = #{mNo}; </select> -->
+
+	<insert id="insert" parameterType="kr.or.ddit.match.vo.MatchVO">
+		INSERT INTO MATCH
+		( M_NO,
+		M_DATE, M_PLAY, CB_HOME, CB_AWAY, ST_NO)
+		VALUES
+		( #{mNO}, #{mDate},
+		#{mPlay}, #{cbHome}, #{cbAway}, #{stNo} )
+	</insert>
+
+	<update id="update">
+
+	</update>
+
+	<delete id="deletBymNo">
+		DELETE FROM MATCH WHERE M_NO = #{mNo}
+	</delete>
+</mapper>

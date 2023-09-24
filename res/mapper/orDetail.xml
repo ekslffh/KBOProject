@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orDetail">
+
+<resultMap type="orDeVO" id="orDeMap">
+      <result property="orNo" column="or_no"/>
+      <result property="prodNo" column="prod_no"/>
+      <result property="odQty" column="od_qty"/>
+      <result property="doAmount" column="do_amount"/>
+   </resultMap>
+
+	<insert id="insert" parameterType="orDeVO">
+      
+      INSERT INTO ORDER_DETAIL
+      ( OR_NO, PROD_NO, OD_QTY, DO_AMOUNT )
+      VALUES
+      ( #{orNo}, #{prodNo}, #{odQty}, #{doAmount} )
+      
+   </insert>
+   
+   <select id="selectAllByProdNo" resultMap="orDeMap" parameterType="orDeVO">
+   SELECT *
+   FROM ORDER_DETAIL
+   WHERE PROD_NO = #{prodNo}
+</select>
+
+</mapper>

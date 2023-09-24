@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+	<!-- 
+	이 영역에 SQL문에 맞는 태그를 사용하여 기술한다.
+	
+	사용할 수 있는 기본적인 태그들
+	<select> ~~~ </select>
+	<insert> ~~~ </insert>
+	<update> ~~~ </update>
+	<delete> ~~~ </delete>
+	
+	위 태그에서 사용되는 속성들
+	
+	1) id속성 : 해당 쿼리를 호출할 때 namespace값과 연결하여 사용하는 이름
+	2) parameterType속성 : SQL문에 사용될 데이터가 들어있는 객체타입을 지정한다.
+					   (보통 VO클래스, 자바의 자료형이름 등이 사용된다.)
+	3) resultType속성 : select문을 실행한 결과를 담을 객체타입을 지정한다.
+					   (보통 VO클래스나 자바의 자료형이름을 사용한다.)
+	4) resultMap속성 : 결과 레코드 컬럼명과 VO객체의 property명이 다를 경우에 적절한 매핑을
+					위해 사용한다.
+	-->
+	
+	<resultMap type="memVO" id="memMap">
+		<result property="memId" column="mem_id"/>
+		<result property="memPw" column="mem_pw"/>
+		<result property="memName" column="mem_birth"/>
+		<result property="memBirth" column="mem_name"/>
+		<result property="memGender" column="mem_gender"/>
+		<result property="memEmail" column="mem_email"/>
+		<result property="memTel" column="mem_tel"/>
+		<result property="memAdd" column="mem_add"/>
+		<result property="msName" column="ms_name"/>
+		<result property="cbNo" column="cb_no"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="memVO">
+	
+		SELECT * FROM MEMBER
+				
+	</select>
+	
+	<select id="findById" resultType="memVO">
+	
+		SELECT * FROM MEMBER
+		WHERE MEM_ID = #{memId}
+	
+	</select>
+	
+	<select id="findByAdd" resultType="memVO">
+	
+<!-- 		SELECT * FROM MEMBER -->
+<!-- 		WHERE MEM_ADD = #{memAdd} -->
+	
+	</select>
+	
+	<insert id="insert" parameterType="memVO">
+		
+		INSERT INTO MEMBER
+		( MEM_ID, MEM_PW, MEM_NAME, MEM_BIRTH, MEM_GENDER, MEM_EMAIL, MEM_TEL, MEM_ADD, MS_NAME, CB_NO )
+		VALUES
+		( #{memId}, #{memPw}, #{memName}, #{memBirth}, #{memGender}, #{memEmail}, #{memTel}, #{memAdd}, #{msName}, #{cbNo} )
+		
+	</insert>
+	
+	<update id="update" parameterType="memVO">
+		
+		UPDATE MEMBER
+		SET MEM_PW = #{memPw}, MEM_NAME = #{memName}, MEM_EMAIL = #{memEmail}, MEM_TEL = #{memTel}, MEM_ADD = #{memAdd}, CB_NO = #{cbNo}
+		WHERE MEM_ID = #{memId} 
+		
+	</update>
+	
+	<delete id="deleteById" >
+	
+		DELETE FROM MEMBER WHERE MEM_ID = #{memId}
+	
+	</delete>
+	
+	<select id="check" resultType="int">
+	
+		SELECT COUNT(*) AS CNT
+		FROM MEMBER
+		WHERE MEM_ID = #{memId}
+	
+	</select>
+	
+	<select id="loginChk" parameterType="map" resultType="string">
+  		select mem_id
+  		from member
+  		where mem_id = #{memId} and mem_pw = #{memPw}
+  	</select>
+  	
+  	<select id="findIdChk" parameterType="map" resultType="string">
+		SELECT mem_id
+		FROM member
+		WHERE mem_name = #{uName} AND mem_tel = #{uTel}
+	</select>
+	
+<!-- 	<select id="search" resultMap="memMap"> -->
+	
+<!-- 		select * from mymember where 1=1 -->
+		
+<!-- 		<if test="memId != null and memId != ''"> -->
+<!-- 			and mem_id = #{memId} -->
+<!-- 		</if>  -->
+<!-- 		<if test="memName != null and memName != ''"> -->
+<!-- 			and mem_name = #{memName} -->
+<!-- 		</if>  -->
+<!-- 		<if test="memTel != null and memTel != ''"> -->
+<!-- 			and mem_tel = #{memTel} -->
+<!-- 		</if>  -->
+<!-- 		<if test="memAddr != null and memAddr != ''"> -->
+<!-- 			and mem_addr like '%' || #{memAddr} || '%' -->
+<!-- 		</if>  -->
+		
+<!-- 	</select> -->
+	
+</mapper>

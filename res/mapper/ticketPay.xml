@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticketPay">
+
+	<resultMap type="ticketPayVO" id="ticketPayMap">
+		<result property="tpNo" column="tp_no"/>
+		<result property="tpPrice" column="tp_price"/>
+		<result property="tpDc" column="tp_dc"/>
+		<result property="tpAmount" column="tp_amount"/>
+		<result property="tpDate" column="tp_date"/>
+	</resultMap>
+	
+	<select id="findAll" resultType="ticketPayVO">
+	
+		select * from ticket_pay
+				
+	</select>
+	
+	<select id="findById" resultType="ticketPayVO">
+	
+		select * from ticket_pay
+		where tp_no = #{tpNo}
+	
+	</select>
+	
+	<insert id="insert" parameterType="ticketPayVO">
+		
+		insert into ticket_pay (tp_no, tp_price, tp_dc, tp_amount, tp_date)
+		values (#{tpNo}, #{tpPrice}, #{tpDc}, #{tpAmount}, SYSDATE)
+		
+	</insert>
+	
+	<update id="update" parameterType="ticketPayVO">
+		
+		update ticket_pay
+		set tp_price = #{tpPrice}, tp_dc = #{tpDc}, tp_amount = #{tpAmount}
+		where tp_no = #{tpNo}
+		
+	</update>
+	
+	<delete id="deleteById">
+	
+		delete from ticket_pay where tp_no = #{tpNo}
+	
+	</delete>
+	
+	<select id="findByMemId">
+	
+		select tp.tp_no, tp_price, tp_dc, tp_amount, tp_date from ticket_pay tp 
+		inner join ticket t on tp.tp_no = t.tp_no
+		where t.mem_id = #{memId}
+		
+	</select>
+	
+	<!-- 특정 멤버의 전체 결제내역의 총 결제금액 가져오기 (예매에 대한) -->
+	<select id="getTotalTicketPriceByMemId">
+	
+		select nvl(sum(tp_amount), 0) total_ticket_price 
+		from ticket_pay where tp_no in 
+		(select distinct tp_no from ticket where mem_id = #{memId})
+	
+	</select>
+	
+	<!-- 특정 멤버의 전체 결제내역의 총 결제금액 가져오기 (상품에 대한) -->
+	<select id="getTotalProductPriceByMemId">
+	
+		select nvl(sum(pay_amount), 0) total_product_price 
+		from pay where pay_no in 
+		(select pay_no from orders where mem_id = #{memId})
+	
+	</select>
+	
+</mapper>

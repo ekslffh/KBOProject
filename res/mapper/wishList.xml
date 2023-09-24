@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wishList">
+
+	<resultMap type="wishListVO" id="wishListMap">
+		<result property="memId" column="mem_id" />
+		<result property="prodNo" column="prod_no" />
+		<result property="wiDate" column="wi_date" />
+	</resultMap>
+
+	<select id="findAll" resultType="wishListVO">
+
+		SELECT * FROM WISHLIST
+
+	</select>
+
+	<select id="findByWish" parameterType="map"
+		resultType="java.util.Date">
+		SELECT MAX(wi_date) FROM WISHLIST
+		WHERE MEM_ID = #{memId} AND PROD_NO = #{prodNo}
+	</select>
+
+
+	<insert id="insert" parameterType="wishListVO">
+
+		INSERT INTO WISHLIST
+		( MEM_ID, PROD_NO, WI_DATE )
+		VALUES
+		( #{memId}, #{prodNo},
+		#{wiDate})
+
+	</insert>
+
+
+	<delete id="delete">
+
+		DELETE FROM WISHLIST WHERE MEM_ID = #{memId} AND PROD_NO = #{prodNo}
+
+	</delete>
+	
+	<select id="findByProd" parameterType="map" resultType="wishListVO">
+	
+		SELECT * FROM WISHLIST
+		WHERE PROD_NO = #{prodNo} AND MEM_ID = #{memId}
+	
+	</select>
+
+</mapper>

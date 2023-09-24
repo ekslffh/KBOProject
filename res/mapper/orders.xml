@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orders">
+
+<resultMap type="orVO" id="orMap">
+      <result property="orNo" column="or_no"/>
+      <result property="orDate" column="or_date"/>
+      <result property="orAdd" column="or_add"/>
+      <result property="memId" column="mem_id"/>
+      <result property="payNo" column="pay_no"/>
+   </resultMap>
+   
+   <select id="findAll" resultType="orVO">
+   
+      SELECT * FROM ORDERS
+            
+   </select>
+   
+<!-- 	<select id="joinCbName" resultMap="prodMap"> -->
+<!-- 	  SELECT c.cb_name AS cbName -->
+<!-- 	  FROM PRODUCT p -->
+<!-- 	  INNER JOIN CLUB c ON p.cb_no = c.cb_no -->
+<!-- 	  WHERE p.cg_name = #{cgName} -->
+<!-- 	</select> -->
+   
+   
+   <select id="findById" resultType="orVO">
+   
+      SELECT * FROM ORDERS
+      WHERE OR_NO = #{orNo}
+   
+   </select>
+   
+   <insert id="insert" parameterType="orVO">
+      
+      INSERT INTO ORDERS
+      ( OR_NO, OR_DATE, OR_ADD, MEM_ID, PAY_NO )
+      VALUES
+      ( #{orNo}, #{orDate}, #{orAdd}, #{memId}, #{payNo} )
+      
+   </insert>
+   
+   <update id="update" parameterType="orVO">
+      
+      UPDATE ORDERS
+      SET OR_DATE = #{orDate}, OR_ADD = #{orAdd}, MEM_ID = #{memId}, PAY_NO = #{payNo}
+      WHERE OR_NO = #{orNO} 
+      
+   </update>
+   
+   <delete id="deleteById" >
+   
+      DELETE FROM ORDER WHERE OR_NO = #{orNO} 
+   
+   </delete>
+   
+</mapper>

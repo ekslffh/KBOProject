@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pay">
+
+<resultMap type="payVO" id="payMap">
+      <result property="payNo" column="pay_no"/>
+      <result property="payPrice" column="pay_price"/>
+      <result property="payDc" column="pay_dc"/>
+      <result property="payAmount" column="pay_amount"/>
+      <result property="payDate" column="pay_date"/>
+   </resultMap>
+   
+   <select id="findAll" resultMap="payMap">
+   
+      SELECT * FROM PAY
+            
+   </select>
+   
+   <select id="findById" resultMap="payMap">
+   
+      SELECT * FROM PAY
+      WHERE PAY_NO = #{payNo}
+   
+   </select>
+   
+<!--    <select id="findProdByCg" resultType="payMap"> -->
+<!-- 	  SELECT * -->
+<!-- 	  FROM PRODUCT -->
+<!-- 	  WHERE cg_name = #{cgName} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="findProdByCb" resultType="payMap"> -->
+<!-- 	  SELECT * -->
+<!-- 	  FROM PRODUCT -->
+<!-- 	  WHERE cb_no = #{cbNo} -->
+<!-- 	</select> -->
+   
+   
+   <insert id="insert">
+      
+      INSERT INTO PAY
+      ( PAY_NO, PAY_PRICE, PAY_DC, PAY_AMOUNT, PAY_DATE )
+      VALUES
+      ( #{payNo}, #{payPrice}, #{payDc}, #{payAmount}, #{payDate})
+      
+   </insert>
+   
+<!--    <update id="update" parameterType="payMap"> -->
+      
+<!--       UPDATE PAY -->
+<!--       SET PAY_NO = #{payNo}, PAY_PRICE = #{payPrice}, PAY_DC = #{payDc}, PAY_AMOUNT = #{payAmount}, PAY_DATE = #{payDate} -->
+<!--       WHERE PAY_NO = #{payNo}  -->
+      
+<!--    </update> -->
+   
+<!--    <delete id="deleteById" > -->
+   
+<!--       DELETE FROM PAY WHERE PAY_NO = #{payNo} -->
+   
+<!--    </delete> -->
+   
+</mapper>

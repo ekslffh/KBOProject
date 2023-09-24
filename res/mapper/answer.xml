@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="answer">
+
+	<select id="findByPqNo" resultType="answerVO">
+		select * from prod_answ where pq_no = #{pqNo}
+	</select>
+
+	<insert id="insert" parameterType="answerVO">
+		insert into prod_answ (pq_no, pa_content, pa_date)
+		values (#{pqNo}, #{paContent}, SYSDATE)
+	</insert>
+
+	<delete id="deleteByPqNo">
+		 DELETE FROM prod_answ
+    	 WHERE pq_no = #{pqNo}
+	</delete>
+	
+</mapper>
+  
+  
+  

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cart">
+
+<resultMap type="cartVO" id="cartMap">
+		<result property="memId" column="mem_id"/>
+		<result property="prodNo" column="prod_no"/>
+		<result property="ctQty" column="ct_qty"/>
+	</resultMap>
+
+	
+	<select id="findByCart" parameterType="map" resultType="int">
+	
+		SELECT NVL(MAX(ct_qty), 0) FROM CART
+		WHERE MEM_ID = #{memId} AND PROD_NO = #{prodNo}
+	
+	</select>
+	
+	<insert id="insert" parameterType="cartVO">
+		
+		INSERT INTO CART
+		( MEM_ID, PROD_NO, CT_QTY )
+		VALUES
+		( #{memId}, #{prodNo}, #{ctQty})
+		
+	</insert>
+	
+	<update id="update" parameterType="cartVO">
+		
+		UPDATE CART
+		SET CT_QTY = #{ctQty}
+		WHERE MEM_ID = #{memId} AND PROD_NO = #{prodNo}
+		
+	</update>
+	
+	<delete id="delete">
+	
+		DELETE FROM CART WHERE MEM_ID = #{memId} AND PROD_NO = #{prodNo}
+	
+	</delete>
+	
+	<select id="findByProd" parameterType="map" resultType="cartVO">
+	
+		SELECT * FROM CART
+		WHERE PROD_NO = #{prodNo} AND MEM_ID = #{memId}
+	
+	</select>
+	
+</mapper>
